@@ -82,6 +82,12 @@ class Post
     #[Assert\Count(max: 4, maxMessage: 'post.too_many_tags')]
     private Collection $tags;
 
+
+
+    #[ORM\Column(name: 'likes_count', type: 'integer', nullable: true)]
+    private ?int $likesCount = 0;
+
+
     public function __construct()
     {
         $this->publishedAt = new \DateTimeImmutable();
@@ -196,5 +202,14 @@ class Post
     public function getTags(): Collection
     {
         return $this->tags;
+    }
+
+    public function getLikesCount(): int
+    {
+        return (int) $this->likesCount;
+    }
+    public function setLikesCount(int $n): void
+    {
+        $this->likesCount = $n;
     }
 }

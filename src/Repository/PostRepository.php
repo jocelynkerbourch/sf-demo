@@ -100,4 +100,16 @@ class PostRepository extends ServiceEntityRepository
             return 2 <= $term->length();
         });
     }
+
+    /**
+     * @return Post[]
+     */
+    public function findTop(int $limit = 10): array
+    {
+        return $this->createQueryBuilder('p')
+            ->orderBy('p.likesCount', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
 }

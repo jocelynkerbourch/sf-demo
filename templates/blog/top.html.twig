@@ -1,0 +1,13 @@
+{% extends "base.html.twig" %}
+{% block body %}
+<h1>Top articles</h1>
+<ul>
+  {% for post in posts %}
+    <li>
+      <a href="{{ path('blog_post_show', { slug: post.slug }) }}">
+        {{ post.title|raw }} — {{ post.likesCount }} likes
+      </a>
+    </li>
+  {% endfor %}
+</ul>
+{% endblock %}
