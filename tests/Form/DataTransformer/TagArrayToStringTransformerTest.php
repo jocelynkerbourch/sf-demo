@@ -28,7 +28,8 @@ final class TagArrayToStringTransformerTest extends TestCase
      */
     public function testCreateTheRightAmountOfTags(): void
     {
-        $tags = $this->getMockedTransformer()->reverseTransform('Hello, Demo, How');
+        $tags = $this->getMockedTransformer()
+->reverseTransform('Hello, Demo, How');
 
         $this->assertCount(3, $tags);
         $this->assertSame('Hello', $tags[0]->getName());
@@ -51,7 +52,8 @@ final class TagArrayToStringTransformerTest extends TestCase
      */
     public function testTrimNames(): void
     {
-        $tags = $this->getMockedTransformer()->reverseTransform('   Hello   ');
+        $tags = $this->getMockedTransformer()
+->reverseTransform('   Hello   ');
 
         $this->assertSame('Hello', $tags[0]->getName());
     }
@@ -61,7 +63,8 @@ final class TagArrayToStringTransformerTest extends TestCase
      */
     public function testDuplicateNames(): void
     {
-        $tags = $this->getMockedTransformer()->reverseTransform('Hello, Hello, Hello');
+        $tags = $this->getMockedTransformer()
+->reverseTransform('Hello, Hello, Hello');
 
         $this->assertCount(1, $tags);
     }
@@ -71,11 +74,9 @@ final class TagArrayToStringTransformerTest extends TestCase
      */
     public function testUsesAlreadyDefinedTags(): void
     {
-        $persistedTags = [
-            new Tag('Hello'),
-            new Tag('World'),
-        ];
-        $tags = $this->getMockedTransformer($persistedTags)->reverseTransform('Hello, World, How, Are, You');
+        $persistedTags = [new Tag('Hello'), new Tag('World'), ];
+        $tags = $this->getMockedTransformer($persistedTags)
+->reverseTransform('Hello, World, How, Are, You');
 
         $this->assertCount(5, $tags);
         $this->assertSame($persistedTags[0], $tags[0]);
@@ -88,11 +89,9 @@ final class TagArrayToStringTransformerTest extends TestCase
      */
     public function testTransform(): void
     {
-        $persistedTags = [
-            new Tag('Hello'),
-            new Tag('World'),
-        ];
-        $transformed = $this->getMockedTransformer()->transform($persistedTags);
+        $persistedTags = [new Tag('Hello'), new Tag('World'), ];
+        $transformed = $this->getMockedTransformer()
+->transform($persistedTags);
 
         $this->assertSame('Hello,World', $transformed);
     }

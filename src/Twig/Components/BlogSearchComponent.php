@@ -22,7 +22,6 @@ use Symfony\UX\LiveComponent\DefaultActionTrait;
  *
  * See https://symfony.com/bundles/ux-live-component/current/index.html
  *
- * @author Romain Monteil <monteil.romain@gmail.com>
  */
 #[AsLiveComponent(name: 'blog_search')]
 final class BlogSearchComponent

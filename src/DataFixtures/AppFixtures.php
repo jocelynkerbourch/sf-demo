@@ -62,7 +62,7 @@ final class AppFixtures extends Fixture
 
             $manager->persist($tag);
 
-            $this->addReference('tag-'.$name, $tag);
+            $this->addReference('tag-' . $name, $tag);
         }
 
         $manager->flush();
@@ -84,7 +84,7 @@ final class AppFixtures extends Fixture
                 $comment = new Comment();
                 $comment->setAuthor($this->getReference('john_user', User::class));
                 $comment->setContent($this->getRandomText(random_int(255, 512)));
-                $comment->setPublishedAt(new \DateTimeImmutable('now + '.$i.'seconds'));
+                $comment->setPublishedAt(new \DateTimeImmutable('now + ' . $i . 'seconds'));
 
                 $post->addComment($comment);
             }
@@ -127,7 +127,6 @@ final class AppFixtures extends Fixture
     }
 
     /**
-     * @throws \Exception
      *
      * @return array<int, array{0: string, 1: AbstractUnicodeString, 2: string, 3: string, 4: \DateTimeImmutable, 5: User, 6: array<Tag>}>
      */
@@ -139,10 +138,15 @@ final class AppFixtures extends Fixture
             // $postData = [$title, $slug, $summary, $content, $publishedAt, $author, $tags, $comments];
             $posts[] = [
                 $title,
-                $this->slugger->slug($title)->lower(),
+                $this->slugger->slug($title)
+->lower(),
                 $this->getRandomText(),
                 $this->getPostContent(),
-                (new \DateTimeImmutable('now - '.$i.'days'))->setTime(random_int(8, 17), random_int(7, 49), random_int(0, 59)),
+                (new \DateTimeImmutable('now - ' . $i . 'days'))->setTime(
+                    random_int(8, 17),
+                    random_int(7, 49),
+                    random_int(0, 59)
+                ),
                 // Ensure that the first post is written by Jane Doe to simplify tests
                 $this->getReference(['jane_admin', 'tom_admin'][0 === $i ? 0 : random_int(0, 1)], User::class),
                 $this->getRandomTags(),
@@ -197,7 +201,9 @@ final class AppFixtures extends Fixture
         shuffle($phrases);
 
         do {
-            $text = u('. ')->join($phrases)->append('.');
+            $text = u('. ')
+->join($phrases)
+->append('.');
             array_pop($phrases);
         } while ($text->length() > $maxLength);
 
@@ -245,7 +251,6 @@ final class AppFixtures extends Fixture
     }
 
     /**
-     * @throws \Exception
      *
      * @return array<Tag>
      */
@@ -255,9 +260,6 @@ final class AppFixtures extends Fixture
         shuffle($tagNames);
         $selectedTags = \array_slice($tagNames, 0, random_int(2, 4));
 
-        return array_map(
-            fn ($tagName) => $this->getReference('tag-'.$tagName, Tag::class),
-            $selectedTags
-        );
+        return array_map(fn ($tagName) => $this->getReference('tag-' . $tagName, Tag::class), $selectedTags);
     }
 }

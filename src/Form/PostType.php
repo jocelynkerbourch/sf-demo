@@ -25,9 +25,6 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 /**
  * Defines the form used to create and manipulate blog posts.
  *
- * @author Ryan Weaver <weaverryan@gmail.com>
- * @author Javier Eguiluz <javier.eguiluz@gmail.com>
- * @author Yonel Ceruto <yonelceruto@gmail.com>
  */
 final class PostType extends AbstractType
 {
@@ -50,7 +47,9 @@ final class PostType extends AbstractType
 
         $builder
             ->add('title', null, [
-                'attr' => ['autofocus' => true],
+                'attr' => [
+'autofocus' => true
+],
                 'label' => 'label.title',
             ])
             ->add('summary', TextareaType::class, [
@@ -58,7 +57,9 @@ final class PostType extends AbstractType
                 'label' => 'label.summary',
             ])
             ->add('content', null, [
-                'attr' => ['rows' => 20],
+                'attr' => [
+'rows' => 20
+],
                 'help' => 'help.post_content',
                 'label' => 'label.content',
             ])

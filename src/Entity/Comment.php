@@ -23,8 +23,6 @@ use function Symfony\Component\String\u;
  * Tip: if you have an existing database, you can generate these entity class automatically.
  * See https://symfony.com/doc/current/doctrine/reverse_engineering.html
  *
- * @author Ryan Weaver <weaverryan@gmail.com>
- * @author Javier Eguiluz <javier.eguiluz@gmail.com>
  */
 #[ORM\Entity]
 #[ORM\Table(name: 'symfony_demo_comment')]
@@ -59,7 +57,8 @@ class Comment
     #[Assert\IsTrue(message: 'comment.is_spam')]
     public function isLegitComment(): bool
     {
-        $containsInvalidCharacters = null !== u($this->content)->indexOf('@');
+        $containsInvalidCharacters = null !== u($this->content)
+->indexOf('@');
 
         return !$containsInvalidCharacters;
     }

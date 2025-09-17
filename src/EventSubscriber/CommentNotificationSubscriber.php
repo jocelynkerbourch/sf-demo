@@ -24,7 +24,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * Notifies post's author about new comments.
  *
- * @author Oleg Voronkovich <oleg-voronkovich@yandex.ru>
  */
 final readonly class CommentNotificationSubscriber implements EventSubscriberInterface
 {
@@ -59,7 +58,7 @@ final readonly class CommentNotificationSubscriber implements EventSubscriberInt
 
         $linkToPost = $this->urlGenerator->generate('blog_post', [
             'slug' => $post->getSlug(),
-            '_fragment' => 'comment_'.$comment->getId(),
+            '_fragment' => 'comment_' . $comment->getId(),
         ], UrlGeneratorInterface::ABSOLUTE_URL);
 
         $subject = $this->translator->trans('notification.comment_created');

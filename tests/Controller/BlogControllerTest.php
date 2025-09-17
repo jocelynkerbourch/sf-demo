@@ -67,7 +67,8 @@ final class BlogControllerTest extends WebTestCase
         $client = static::createClient();
 
         /** @var UserRepository $userRepository */
-        $userRepository = $client->getContainer()->get(UserRepository::class);
+        $userRepository = $client->getContainer()
+->get(UserRepository::class);
 
         /** @var User $user */
         $user = $userRepository->findOneByUsername('jane_admin');
@@ -78,14 +79,18 @@ final class BlogControllerTest extends WebTestCase
 
         // Find first blog post
         $crawler = $client->request('GET', '/en/blog/');
-        $postLink = $crawler->filter('article.post > h2 a')->link();
+        $postLink = $crawler->filter('article.post > h2 a')
+->link();
 
         $client->click($postLink);
         $crawler = $client->submitForm('Publish comment', [
             'comment[content]' => 'Hi, Symfony!',
         ]);
 
-        $newComment = $crawler->filter('.post-comment')->first()->filter('div > p')->text();
+        $newComment = $crawler->filter('.post-comment')
+->first()
+->filter('div > p')
+->text();
 
         $this->assertSame('Hi, Symfony!', $newComment);
     }
@@ -93,10 +98,15 @@ final class BlogControllerTest extends WebTestCase
     public function testAjaxSearch(): void
     {
         $client = static::createClient();
-        $crawler = $client->request('GET', '/en/blog/search', ['q' => 'lorem']);
+        $crawler = $client->request('GET', '/en/blog/search', [
+'q' => 'lorem'
+]);
 
         $this->assertResponseIsSuccessful();
         $this->assertCount(1, $crawler->filter('article.post'));
-        $this->assertSame('Lorem ipsum dolor sit amet consectetur adipiscing elit', $crawler->filter('article.post')->first()->filter('h2 > a')->text());
+        $this->assertSame(
+            'Lorem ipsum dolor sit amet consectetur adipiscing elit',
+            $crawler->filter('article.post')->first()->filter('h2 > a')->text()
+        );
     }
 }

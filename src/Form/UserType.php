@@ -21,7 +21,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 /**
  * Defines the form used to edit an user.
  *
- * @author Romain Monteil <monteil.romain@gmail.com>
  */
 final class UserType extends AbstractType
 {

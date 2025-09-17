@@ -21,9 +21,9 @@ final class ListUsersCommandTest extends AbstractCommandTestCase
     #[DataProvider('maxResultsProvider')]
     public function testListUsers(int $maxResults): void
     {
-        $tester = $this->executeCommand(
-            ['--max-results' => $maxResults]
-        );
+        $tester = $this->executeCommand([
+'--max-results' => $maxResults
+]);
 
         $emptyDisplayLines = 5;
         $this->assertSame($emptyDisplayLines + $maxResults, mb_substr_count($tester->getDisplay(), "\n"));
@@ -44,7 +44,9 @@ final class ListUsersCommandTest extends AbstractCommandTestCase
 
     public function testItSendsAnEmailIfOptionProvided(): void
     {
-        $this->executeCommand(['--send-to' => 'john.doe@symfony.com']);
+        $this->executeCommand([
+'--send-to' => 'john.doe@symfony.com'
+]);
 
         $this->assertEmailCount(1);
     }

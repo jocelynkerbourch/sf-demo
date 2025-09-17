@@ -27,9 +27,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Tip: if you have an existing database, you can generate these entity class automatically.
  * See https://symfony.com/doc/current/doctrine/reverse_engineering.html
  *
- * @author Ryan Weaver <weaverryan@gmail.com>
- * @author Javier Eguiluz <javier.eguiluz@gmail.com>
- * @author Yonel Ceruto <yonelceruto@gmail.com>
  */
 #[ORM\Entity(repositoryClass: PostRepository::class)]
 #[ORM\Table(name: 'symfony_demo_post')]
@@ -69,7 +66,9 @@ class Post
      * @var Collection<int, Comment>
      */
     #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'post', orphanRemoval: true, cascade: ['persist'])]
-    #[ORM\OrderBy(['publishedAt' => 'DESC'])]
+    #[ORM\OrderBy([
+'publishedAt' => 'DESC'
+])]
     private Collection $comments;
 
     /**
@@ -77,9 +76,17 @@ class Post
      */
     #[ORM\ManyToMany(targetEntity: Tag::class, cascade: ['persist'])]
     #[ORM\JoinTable(name: 'symfony_demo_post_tag')]
-    #[ORM\OrderBy(['name' => 'ASC'])]
+    #[ORM\OrderBy([
+'name' => 'ASC'
+])]
     #[Assert\Count(max: 4, maxMessage: 'post.too_many_tags')]
     private Collection $tags;
+
+
+
+    #[ORM\Column(name: 'likes_count', type: 'integer', nullable: true)]
+    private ?int $likesCount = 0;
+
 
     public function __construct()
     {
@@ -195,5 +202,14 @@ class Post
     public function getTags(): Collection
     {
         return $this->tags;
+    }
+
+    public function getLikesCount(): int
+    {
+        return (int) $this->likesCount;
+    }
+    public function setLikesCount(int $n): void
+    {
+        $this->likesCount = $n;
     }
 }

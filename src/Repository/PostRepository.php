@@ -24,9 +24,6 @@ use function Symfony\Component\String\u;
  *
  * See https://symfony.com/doc/current/doctrine.html#querying-for-objects-the-repository
  *
- * @author Ryan Weaver <weaverryan@gmail.com>
- * @author Javier Eguiluz <javier.eguiluz@gmail.com>
- * @author Yonel Ceruto <yonelceruto@gmail.com>
  *
  * @method Post|null findOneByTitle(string $postTitle)
  *
@@ -73,8 +70,8 @@ class PostRepository extends ServiceEntityRepository
 
         foreach ($searchTerms as $key => $term) {
             $queryBuilder
-                ->orWhere('p.title LIKE :t_'.$key)
-                ->setParameter('t_'.$key, '%'.$term.'%')
+                ->orWhere('p.title LIKE :t_' . $key)
+                ->setParameter('t_' . $key, '%' . $term . '%')
             ;
         }
 
@@ -102,5 +99,14 @@ class PostRepository extends ServiceEntityRepository
         return array_filter($terms, static function ($term) {
             return 2 <= $term->length();
         });
+    }
+
+    public function findTop(int $limit = 10): array
+    {
+        return $this->createQueryBuilder('p')
+            ->orderBy('p.likesCount', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
     }
 }

@@ -24,7 +24,6 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 /**
  * Defines the form used to change user's password.
  *
- * @author Romain Monteil <monteil.romain@gmail.com>
  */
 final class ChangePasswordType extends AbstractType
 {
@@ -32,9 +31,7 @@ final class ChangePasswordType extends AbstractType
     {
         $builder
             ->add('currentPassword', PasswordType::class, [
-                'constraints' => [
-                    new UserPassword(),
-                ],
+                'constraints' => [new UserPassword(), ],
                 'label' => 'label.current_password',
                 'mapped' => false,
                 'attr' => [
@@ -43,13 +40,7 @@ final class ChangePasswordType extends AbstractType
             ])
             ->add('newPassword', RepeatedType::class, [
                 'type' => PasswordType::class,
-                'constraints' => [
-                    new NotBlank(),
-                    new Length(
-                        min: 5,
-                        max: 128,
-                    ),
-                ],
+                'constraints' => [new NotBlank(), new Length(min: 5, max: 128,), ],
                 'first_options' => [
                     'hash_property_path' => 'password',
                     'label' => 'label.new_password',

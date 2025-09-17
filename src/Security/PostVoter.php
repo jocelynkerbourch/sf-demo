@@ -23,7 +23,6 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
  *
  * See https://symfony.com/doc/current/security/voters.html
  *
- * @author Yonel Ceruto <yonelceruto@gmail.com>
  *
  * @extends Voter<non-empty-string, Post>
  */

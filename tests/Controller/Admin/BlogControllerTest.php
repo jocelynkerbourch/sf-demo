@@ -44,7 +44,8 @@ class BlogControllerTest extends WebTestCase
         $this->client = static::createClient();
 
         /** @var UserRepository $userRepository */
-        $userRepository = $this->client->getContainer()->get(UserRepository::class);
+        $userRepository = $this->client->getContainer()
+->get(UserRepository::class);
         /** @var User $user */
         $user = $userRepository->findOneByUsername('jane_admin');
         $this->client->loginUser($user);
@@ -53,10 +54,12 @@ class BlogControllerTest extends WebTestCase
     #[DataProvider('getUrlsForRegularUsers')]
     public function testAccessDeniedForRegularUsers(string $httpMethod, string $url): void
     {
-        $this->client->getCookieJar()->clear();
+        $this->client->getCookieJar()
+->clear();
 
         /** @var UserRepository $userRepository */
-        $userRepository = $this->client->getContainer()->get(UserRepository::class);
+        $userRepository = $this->client->getContainer()
+->get(UserRepository::class);
         /** @var User $user */
         $user = $userRepository->findOneByUsername('john_user');
         $this->client->loginUser($user);
@@ -93,7 +96,7 @@ class BlogControllerTest extends WebTestCase
      */
     public function testAdminNewPost(): void
     {
-        $postTitle = 'Blog Post Title '.mt_rand();
+        $postTitle = 'Blog Post Title ' . mt_rand();
         $postSummary = $this->generateRandomString(255);
         $postContent = $this->generateRandomString(1024);
 
@@ -118,12 +121,13 @@ class BlogControllerTest extends WebTestCase
 
     public function testAdminNewDuplicatedPost(): void
     {
-        $postTitle = 'Blog Post Title '.mt_rand();
+        $postTitle = 'Blog Post Title ' . mt_rand();
         $postSummary = $this->generateRandomString(255);
         $postContent = $this->generateRandomString(1024);
 
         $crawler = $this->client->request('GET', '/en/admin/post/new');
-        $form = $crawler->selectButton('Create post')->form([
+        $form = $crawler->selectButton('Create post')
+->form([
             'post[title]' => $postTitle,
             'post[summary]' => $postSummary,
             'post[content]' => $postContent,
@@ -133,7 +137,10 @@ class BlogControllerTest extends WebTestCase
         // post titles must be unique, so trying to create the same post twice should result in an error
         $this->client->submit($form);
 
-        $this->assertSelectorTextContains('form .invalid-feedback .form-error-message', 'This title was already used in another blog post, but they must be unique.');
+        $this->assertSelectorTextContains(
+            'form .invalid-feedback .form-error-message',
+            'This title was already used in another blog post, but they must be unique.'
+        );
         $this->assertSelectorExists('form #post_title.is-invalid');
     }
 
@@ -152,7 +159,7 @@ class BlogControllerTest extends WebTestCase
      */
     public function testAdminEditPost(): void
     {
-        $newBlogPostTitle = 'Blog Post Title '.mt_rand();
+        $newBlogPostTitle = 'Blog Post Title ' . mt_rand();
 
         $this->client->request('GET', '/en/admin/post/1/edit');
         $this->client->submitForm('Save changes', [

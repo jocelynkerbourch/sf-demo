@@ -35,8 +35,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
  * existing bundles that let you generate ready-to-use backends without effort.
  * See https://symfony.com/bundles
  *
- * @author Ryan Weaver <weaverryan@gmail.com>
- * @author Javier Eguiluz <javier.eguiluz@gmail.com>
  */
 #[Route('/admin/post')]
 #[IsGranted(User::ROLE_ADMIN)]
@@ -55,13 +53,17 @@ final class BlogController extends AbstractController
      */
     #[Route('/', name: 'admin_index', methods: ['GET'])]
     #[Route('/', name: 'admin_post_index', methods: ['GET'])]
-    public function index(
-        #[CurrentUser] User $user,
-        PostRepository $posts,
-    ): Response {
-        $authorPosts = $posts->findBy(['author' => $user], ['publishedAt' => 'DESC']);
+    public function index(#[CurrentUser] User $user, PostRepository $posts,): Response
+    {
+        $authorPosts = $posts->findBy([
+'author' => $user
+], [
+'publishedAt' => 'DESC'
+]);
 
-        return $this->render('admin/blog/index.html.twig', ['posts' => $authorPosts]);
+        return $this->render('admin/blog/index.html.twig', [
+'posts' => $authorPosts
+]);
     }
 
     /**
@@ -73,7 +75,8 @@ final class BlogController extends AbstractController
      */
     #[Route('/new', name: 'admin_post_new', methods: ['GET', 'POST'])]
     public function new(
-        #[CurrentUser] User $user,
+        #[CurrentUser]
+        User $user,
         Request $request,
         EntityManagerInterface $entityManager,
     ): Response {
@@ -119,7 +122,9 @@ final class BlogController extends AbstractController
     /**
      * Finds and displays a Post entity.
      */
-    #[Route('/{id:post}', name: 'admin_post_show', requirements: ['id' => Requirement::POSITIVE_INT], methods: ['GET'])]
+    #[Route('/{id:post}', name: 'admin_post_show', requirements: [
+'id' => Requirement::POSITIVE_INT
+], methods: ['GET'])]
     public function show(Post $post): Response
     {
         // This security check can also be performed
@@ -134,7 +139,9 @@ final class BlogController extends AbstractController
     /**
      * Displays a form to edit an existing Post entity.
      */
-    #[Route('/{id:post}/edit', name: 'admin_post_edit', requirements: ['id' => Requirement::POSITIVE_INT], methods: ['GET', 'POST'])]
+    #[Route('/{id:post}/edit', name: 'admin_post_edit', requirements: [
+'id' => Requirement::POSITIVE_INT
+], methods: ['GET', 'POST'])]
     #[IsGranted('edit', subject: 'post', message: 'Posts can only be edited by their authors.')]
     public function edit(Request $request, Post $post, EntityManagerInterface $entityManager): Response
     {
@@ -145,7 +152,9 @@ final class BlogController extends AbstractController
             $entityManager->flush();
             $this->addFlash('success', 'post.updated_successfully');
 
-            return $this->redirectToRoute('admin_post_edit', ['id' => $post->getId()], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('admin_post_edit', [
+'id' => $post->getId()
+], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('admin/blog/edit.html.twig', [
@@ -157,12 +166,15 @@ final class BlogController extends AbstractController
     /**
      * Deletes a Post entity.
      */
-    #[Route('/{id:post}/delete', name: 'admin_post_delete', requirements: ['id' => Requirement::POSITIVE_INT], methods: ['POST'])]
+    #[Route('/{id:post}/delete', name: 'admin_post_delete', requirements: [
+'id' => Requirement::POSITIVE_INT
+], methods: ['POST'])]
     #[IsGranted('delete', subject: 'post')]
     public function delete(Request $request, Post $post, EntityManagerInterface $entityManager): Response
     {
         /** @var string|null $token */
-        $token = $request->getPayload()->get('token');
+        $token = $request->getPayload()
+->get('token');
 
         if (!$this->isCsrfTokenValid('delete', $token)) {
             return $this->redirectToRoute('admin_post_index', [], Response::HTTP_SEE_OTHER);
@@ -171,7 +183,8 @@ final class BlogController extends AbstractController
         // Delete the tags associated with this blog post. This is done automatically
         // by Doctrine, except for SQLite (the database used in this application)
         // because foreign key support is not enabled by default in SQLite
-        $post->getTags()->clear();
+        $post->getTags()
+->clear();
 
         $entityManager->remove($post);
         $entityManager->flush();

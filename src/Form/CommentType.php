@@ -24,8 +24,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  *
  * See https://symfony.com/doc/current/forms.html#creating-form-classes
  *
- * @author Ryan Weaver <weaverryan@gmail.com>
- * @author Javier Eguiluz <javier.eguiluz@gmail.com>
  */
 final class CommentType extends AbstractType
 {
