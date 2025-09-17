@@ -47,7 +47,7 @@
     "require-dev": {
         "dama/doctrine-test-bundle": "^8.0.2",
         "doctrine/doctrine-fixtures-bundle": "^3.5",
-        "phpstan/phpstan": "^2.0",
+        "phpstan/phpstan": "^2.1",
         "phpstan/phpstan-doctrine": "^2.0",
         "phpstan/phpstan-symfony": "^2.0",
         "phpunit/phpunit": "^11.3",
@@ -56,7 +56,8 @@
         "symfony/debug-bundle": "^7",
         "symfony/maker-bundle": "^1.36",
         "symfony/stopwatch": "^7",
-        "symfony/web-profiler-bundle": "^7"
+        "symfony/web-profiler-bundle": "^7",
+        "symplify/easy-coding-standard": "^12.6"
     },
     "replace": {
         "symfony/polyfill-ctype": "*",
