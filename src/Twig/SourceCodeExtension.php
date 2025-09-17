@@ -25,8 +25,6 @@ use function Symfony\Component\String\u;
  * page. If you are starting with Symfony, don't look at this code and consider
  * studying instead the code of the src/Twig/AppExtension.php extension.
  *
- * @author Ryan Weaver <weaverryan@gmail.com>
- * @author Javier Eguiluz <javier.eguiluz@gmail.com>
  */
 final class SourceCodeExtension extends AbstractExtension
 {
@@ -40,7 +38,7 @@ final class SourceCodeExtension extends AbstractExtension
         #[Autowire('%kernel.project_dir%')]
         private string $projectDir,
     ) {
-        $this->projectDir = str_replace('\\', '/', $projectDir).'/';
+        $this->projectDir = str_replace('\\', '/', $projectDir) . '/';
     }
 
     public function setController(?callable $controller): void
@@ -51,8 +49,14 @@ final class SourceCodeExtension extends AbstractExtension
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('link_source_file', $this->linkSourceFile(...), ['is_safe' => ['html'], 'needs_environment' => true]),
-            new TwigFunction('show_source_code', $this->showSourceCode(...), ['is_safe' => ['html'], 'needs_environment' => true]),
+            new TwigFunction('link_source_file', $this->linkSourceFile(...), [
+'is_safe' => ['html'],
+'needs_environment' => true
+]),
+            new TwigFunction('show_source_code', $this->showSourceCode(...), [
+'is_safe' => ['html'],
+'needs_environment' => true
+]),
         ];
     }
 
@@ -71,7 +75,8 @@ final class SourceCodeExtension extends AbstractExtension
             return '';
         }
 
-        return \sprintf('<a href="%s" title="Click to open this file" class="file_link">%s</a> at line %d',
+        return \sprintf(
+            '<a href="%s" title="Click to open this file" class="file_link">%s</a> at line %d',
             htmlspecialchars($link, \ENT_COMPAT | \ENT_SUBSTITUTE, $twig->getCharset()),
             htmlspecialchars($text, \ENT_COMPAT | \ENT_SUBSTITUTE, $twig->getCharset()),
             $line,
@@ -102,7 +107,10 @@ final class SourceCodeExtension extends AbstractExtension
         $fileName = $method->getFileName();
 
         if (false === $classCode = file($fileName)) {
-            throw new \LogicException(\sprintf('There was an error while trying to read the contents of the "%s" file.', $fileName));
+            throw new \LogicException(\sprintf(
+                'There was an error while trying to read the contents of the "%s" file.',
+                $fileName
+            ));
         }
 
         $startLine = $method->getStartLine() - 1;
@@ -171,10 +179,12 @@ final class SourceCodeExtension extends AbstractExtension
      */
     private function unindentCode(string $code): string
     {
-        $codeLines = u($code)->split("\n");
+        $codeLines = u($code)
+->split("\n");
 
         $indentedOrBlankLines = array_filter($codeLines, static function ($lineOfCode) {
-            return u($lineOfCode)->isEmpty() || u($lineOfCode)->startsWith('    ');
+            return u($lineOfCode)->isEmpty() || u($lineOfCode)
+->startsWith('    ');
         });
 
         $codeIsIndented = \count($indentedOrBlankLines) === \count($codeLines);
@@ -183,7 +193,9 @@ final class SourceCodeExtension extends AbstractExtension
             $unindentedLines = array_map(static function ($lineOfCode) {
                 return u($lineOfCode)->after('    ');
             }, $codeLines);
-            $code = u("\n")->join($unindentedLines)->toString();
+            $code = u("\n")
+->join($unindentedLines)
+->toString();
         }
 
         return $code;

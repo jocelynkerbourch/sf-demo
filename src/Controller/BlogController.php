@@ -33,8 +33,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 /**
  * Controller used to manage blog contents in the public part of the site.
  *
- * @author Ryan Weaver <weaverryan@gmail.com>
- * @author Javier Eguiluz <javier.eguiluz@gmail.com>
  */
 #[Route('/blog')]
 final class BlogController extends AbstractController
@@ -45,16 +43,33 @@ final class BlogController extends AbstractController
      *
      * See https://symfony.com/doc/current/routing.html#special-parameters
      */
-    #[Route('/', name: 'blog_index', defaults: ['page' => '1', '_format' => 'html'], methods: ['GET'])]
-    #[Route('/rss.xml', name: 'blog_rss', defaults: ['page' => '1', '_format' => 'xml'], methods: ['GET'])]
-    #[Route('/page/{page}', name: 'blog_index_paginated', defaults: ['_format' => 'html'], requirements: ['page' => Requirement::POSITIVE_INT], methods: ['GET'])]
+    #[Route('/', name: 'blog_index', defaults: [
+'page' => '1',
+'_format' => 'html'
+], methods: ['GET'])]
+    #[Route('/rss.xml', name: 'blog_rss', defaults: [
+'page' => '1',
+'_format' => 'xml'
+], methods: ['GET'])]
+    #[Route('/page/{page}', name: 'blog_index_paginated', defaults: [
+'_format' => 'html'
+], requirements: [
+'page' => Requirement::POSITIVE_INT
+], methods: ['GET'])]
     #[Cache(smaxage: 10)]
-    public function index(Request $request, int $page, string $_format, PostRepository $posts, TagRepository $tags): Response
-    {
+    public function index(
+        Request $request,
+        int $page,
+        string $_format,
+        PostRepository $posts,
+        TagRepository $tags
+    ): Response {
         $tag = null;
 
         if ($request->query->has('tag')) {
-            $tag = $tags->findOneBy(['name' => $request->query->get('tag')]);
+            $tag = $tags->findOneBy([
+'name' => $request->query->get('tag')
+]);
         }
 
         $latestPosts = $posts->findLatest($page, $tag);
@@ -62,7 +77,7 @@ final class BlogController extends AbstractController
         // Every template name also has two extensions that specify the format and
         // engine for that template.
         // See https://symfony.com/doc/current/templates.html#template-naming
-        return $this->render('blog/index.'.$_format.'.twig', [
+        return $this->render('blog/index.' . $_format . '.twig', [
             'paginator' => $latestPosts,
             'tagName' => $tag?->getName(),
         ]);
@@ -77,7 +92,9 @@ final class BlogController extends AbstractController
      * also has multiple arguments.
      * See https://symfony.com/doc/current/doctrine.html#automatically-fetching-objects-entityvalueresolver.
      */
-    #[Route('/posts/{slug:post}', name: 'blog_post', requirements: ['slug' => Requirement::ASCII_SLUG], methods: ['GET'])]
+    #[Route('/posts/{slug:post}', name: 'blog_post', requirements: [
+'slug' => Requirement::ASCII_SLUG
+], methods: ['GET'])]
     public function postShow(Post $post): Response
     {
         // Symfony's 'dump()' function is an improved version of PHP's 'var_dump()' but
@@ -94,7 +111,9 @@ final class BlogController extends AbstractController
         // You can also leverage Symfony's 'dd()' function that dumps and
         // stops the execution
 
-        return $this->render('blog/post_show.html.twig', ['post' => $post]);
+        return $this->render('blog/post_show.html.twig', [
+'post' => $post
+]);
     }
 
     /**
@@ -103,12 +122,18 @@ final class BlogController extends AbstractController
      *
      * See https://symfony.com/doc/current/doctrine.html#doctrine-entity-value-resolver
      */
-    #[Route('/comment/{postSlug}/new', name: 'comment_new', requirements: ['postSlug' => Requirement::ASCII_SLUG], methods: ['POST'])]
+    #[Route('/comment/{postSlug}/new', name: 'comment_new', requirements: [
+'postSlug' => Requirement::ASCII_SLUG
+], methods: ['POST'])]
     #[IsGranted('IS_AUTHENTICATED')]
     public function commentNew(
-        #[CurrentUser] User $user,
+        #[CurrentUser]
+        User $user,
         Request $request,
-        #[MapEntity(mapping: ['postSlug' => 'slug'])] Post $post,
+        #[MapEntity(mapping: [
+'postSlug' => 'slug'
+])]
+        Post $post,
         EventDispatcherInterface $eventDispatcher,
         EntityManagerInterface $entityManager,
     ): Response {
@@ -134,7 +159,9 @@ final class BlogController extends AbstractController
             // See https://symfony.com/doc/current/messenger.html
             $eventDispatcher->dispatch(new CommentCreatedEvent($comment));
 
-            return $this->redirectToRoute('blog_post', ['slug' => $post->getSlug()], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('blog_post', [
+'slug' => $post->getSlug()
+], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('blog/comment_form_error.html.twig', [
@@ -161,6 +188,8 @@ final class BlogController extends AbstractController
     #[Route('/search', name: 'blog_search', methods: ['GET'])]
     public function search(Request $request): Response
     {
-        return $this->render('blog/search.html.twig', ['query' => (string) $request->query->get('q', '')]);
+        return $this->render('blog/search.html.twig', [
+'query' => (string) $request->query->get('q', '')
+]);
     }
 }

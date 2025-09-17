@@ -44,14 +44,8 @@ use function Symfony\Component\String\u;
  * We use the default services.yaml configuration, so command classes are registered as services.
  * See https://symfony.com/doc/current/console/commands_as_services.html
  *
- * @author Javier Eguiluz <javier.eguiluz@gmail.com>
- * @author Yonel Ceruto <yonelceruto@gmail.com>
  */
-#[AsCommand(
-    name: 'app:add-user',
-    description: 'Creates users and stores them in the database',
-    help: self::HELP,
-)]
+#[AsCommand(name: 'app:add-user', description: 'Creates users and stores them in the database', help: self::HELP,)]
 final class AddUserCommand extends Command
 {
     private SymfonyStyle $io;
@@ -114,7 +108,7 @@ final class AddUserCommand extends Command
 
         // Ask for the username if it's not defined
         if (null !== $username) {
-            $this->io->text(' > <info>Username</info>: '.$username);
+            $this->io->text(' > <info>Username</info>: ' . $username);
         } else {
             $username = $this->io->ask('Username', null, $this->validator->validateUsername(...));
             $input->setArgument('username', $username);
@@ -122,15 +116,18 @@ final class AddUserCommand extends Command
 
         // Ask for the password if it's not defined
         if (null !== $password) {
-            $this->io->text(' > <info>Password</info>: '.u('*')->repeat(u($password)->length()));
+            $this->io->text(' > <info>Password</info>: ' . u('*')->repeat(u($password)->length()));
         } else {
-            $password = $this->io->askHidden('Password (your type will be hidden)', $this->validator->validatePassword(...));
+            $password = $this->io->askHidden(
+                'Password (your type will be hidden)',
+                $this->validator->validatePassword(...)
+            );
             $input->setArgument('password', $password);
         }
 
         // Ask for the email if it's not defined
         if (null !== $email) {
-            $this->io->text(' > <info>Email</info>: '.$email);
+            $this->io->text(' > <info>Email</info>: ' . $email);
         } else {
             $email = $this->io->ask('Email', null, $this->validator->validateEmail(...));
             $input->setArgument('email', $email);
@@ -138,7 +135,7 @@ final class AddUserCommand extends Command
 
         // Ask for the full name if it's not defined
         if (null !== $fullName) {
-            $this->io->text(' > <info>Full Name</info>: '.$fullName);
+            $this->io->text(' > <info>Full Name</info>: ' . $fullName);
         } else {
             $fullName = $this->io->ask('Full Name', null, $this->validator->validateFullName(...));
             $input->setArgument('full-name', $fullName);
@@ -154,11 +151,16 @@ final class AddUserCommand extends Command
      * @see https://symfony.com/doc/current/console/input.html
      */
     public function __invoke(
-        #[Argument('The username of the new user')] string $username,
-        #[Argument('The plain password of the new user', 'password')] string $plainPassword,
-        #[Argument('The email of the new user')] string $email,
-        #[Argument('The full name of the new user')] string $fullName,
-        #[Option('If set, the user is created as an administrator', 'admin')] bool $isAdmin = false,
+        #[Argument('The username of the new user')]
+        string $username,
+        #[Argument('The plain password of the new user', 'password')]
+        string $plainPassword,
+        #[Argument('The email of the new user')]
+        string $email,
+        #[Argument('The full name of the new user')]
+        string $fullName,
+        #[Option('If set, the user is created as an administrator', 'admin')]
+        bool $isAdmin = false,
     ): int {
         $stopwatch = new Stopwatch();
         $stopwatch->start('add-user-command');
@@ -180,12 +182,16 @@ final class AddUserCommand extends Command
         $this->entityManager->persist($user);
         $this->entityManager->flush();
 
-        $this->io->success(\sprintf('%s was successfully created: %s (%s)', $isAdmin ? 'Administrator user' : 'User', $user->getUsername(), $user->getEmail()));
+        $this->io->success(
+            \sprintf('%s was successfully created: %s (%s)', $isAdmin ? 'Administrator user' : 'User', $user->getUsername(), $user->getEmail())
+        );
 
         $event = $stopwatch->stop('add-user-command');
 
         if ($this->io->isVerbose()) {
-            $this->io->comment(\sprintf('New user database id: %d / Elapsed time: %.2f ms / Consumed memory: %.2f MB', $user->getId(), $event->getDuration(), $event->getMemory() / (1024 ** 2)));
+            $this->io->comment(
+                \sprintf('New user database id: %d / Elapsed time: %.2f ms / Consumed memory: %.2f MB', $user->getId(), $event->getDuration(), $event->getMemory() / (1024 ** 2))
+            );
         }
 
         return Command::SUCCESS;
@@ -194,10 +200,15 @@ final class AddUserCommand extends Command
     private function validateUserData(string $username, string $plainPassword, string $email, string $fullName): void
     {
         // first check if a user with the same username already exists.
-        $existingUser = $this->users->findOneBy(['username' => $username]);
+        $existingUser = $this->users->findOneBy([
+'username' => $username
+]);
 
         if (null !== $existingUser) {
-            throw new RuntimeException(\sprintf('There is already a user registered with the "%s" username.', $username));
+            throw new RuntimeException(\sprintf(
+                'There is already a user registered with the "%s" username.',
+                $username
+            ));
         }
 
         // validate password and email if is not this input means interactive.
@@ -206,7 +217,9 @@ final class AddUserCommand extends Command
         $this->validator->validateFullName($fullName);
 
         // check if a user with the same email already exists.
-        $existingEmail = $this->users->findOneBy(['email' => $email]);
+        $existingEmail = $this->users->findOneBy([
+'email' => $email
+]);
 
         if (null !== $existingEmail) {
             throw new RuntimeException(\sprintf('There is already a user registered with the "%s" email.', $email));

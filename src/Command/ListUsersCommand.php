@@ -37,7 +37,6 @@ use Symfony\Component\Mime\Email;
  *
  * See https://symfony.com/doc/current/console.html
  *
- * @author Javier Eguiluz <javier.eguiluz@gmail.com>
  */
 #[AsCommand(
     name: 'app:list-users',
@@ -57,7 +56,8 @@ use Symfony\Component\Mime\Email;
         the email address specified in the <comment>--send-to</comment> option:
 
           <info>php %command.full_name%</info> <comment>--send-to=fabien@symfony.com</comment>
-        HELP,
+        HELP
+    ,
 )]
 final class ListUsersCommand
 {
@@ -80,11 +80,15 @@ final class ListUsersCommand
     public function __invoke(
         InputInterface $input,
         OutputInterface $output,
-        #[Option('If set, the result is sent to the given email address', 'send-to')] ?string $email = null,
-        #[Option('Limits the number of users listed')] int $maxResults = 50,
+        #[Option('If set, the result is sent to the given email address', 'send-to')]
+        ?string $email = null,
+        #[Option('Limits the number of users listed')]
+        int $maxResults = 50,
     ): int {
         // Use ->findBy() instead of ->findAll() to allow result sorting and limiting
-        $allUsers = $this->users->findBy([], ['id' => 'DESC'], $maxResults);
+        $allUsers = $this->users->findBy([], [
+'id' => 'DESC'
+], $maxResults);
 
         $createUserArray = static function (User $user): array {
             return [
@@ -106,10 +110,7 @@ final class ListUsersCommand
         // to send the list of users via email with the '--send-to' option
         $bufferedOutput = new BufferedOutput();
         $io = new SymfonyStyle($input, $bufferedOutput);
-        $io->table(
-            ['ID', 'Full Name', 'Username', 'Email', 'Roles'],
-            $usersAsPlainArrays
-        );
+        $io->table(['ID', 'Full Name', 'Username', 'Email', 'Roles'], $usersAsPlainArrays);
 
         // instead of just displaying the table of users, store its contents in a variable
         $usersAsATable = $bufferedOutput->fetch();

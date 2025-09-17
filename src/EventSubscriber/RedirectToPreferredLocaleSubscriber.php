@@ -24,7 +24,6 @@ use function Symfony\Component\String\u;
  *
  * See https://symfony.com/doc/current/components/http_kernel.html#the-kernel-request-event
  *
- * @author Oleg Voronkovich <oleg-voronkovich@yandex.ru>
  */
 final class RedirectToPreferredLocaleSubscriber implements EventSubscriberInterface
 {
@@ -41,7 +40,11 @@ final class RedirectToPreferredLocaleSubscriber implements EventSubscriberInterf
         $this->defaultLocale = $defaultLocale ?: $this->enabledLocales[0];
 
         if (!\in_array($this->defaultLocale, $this->enabledLocales, true)) {
-            throw new \UnexpectedValueException(\sprintf('The default locale ("%s") must be one of "%s".', $this->defaultLocale, implode(', ', $this->enabledLocales)));
+            throw new \UnexpectedValueException(\sprintf(
+                'The default locale ("%s") must be one of "%s".',
+                $this->defaultLocale,
+                implode(', ', $this->enabledLocales)
+            ));
         }
 
         // Add the default locale at the first position of the array,
@@ -77,7 +80,9 @@ final class RedirectToPreferredLocaleSubscriber implements EventSubscriberInterf
         $preferredLanguage = $request->getPreferredLanguage($this->enabledLocales);
 
         if ($preferredLanguage !== $this->defaultLocale) {
-            $response = new RedirectResponse($this->urlGenerator->generate('homepage', ['_locale' => $preferredLanguage]));
+            $response = new RedirectResponse($this->urlGenerator->generate('homepage', [
+'_locale' => $preferredLanguage
+]));
             $event->setResponse($response);
         }
     }

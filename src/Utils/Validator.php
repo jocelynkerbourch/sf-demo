@@ -19,7 +19,6 @@ use function Symfony\Component\String\u;
  * services into a Symfony application.
  * See https://symfony.com/doc/current/service_container.html#creating-configuring-services-in-the-container.
  *
- * @author Javier Eguiluz <javier.eguiluz@gmail.com>
  */
 final class Validator
 {
@@ -30,7 +29,9 @@ final class Validator
         }
 
         if (1 !== preg_match('/^[a-z_]+$/', $username)) {
-            throw new InvalidArgumentException('The username must contain only lowercase latin characters and underscores.');
+            throw new InvalidArgumentException(
+                'The username must contain only lowercase latin characters and underscores.'
+            );
         }
 
         return $username;

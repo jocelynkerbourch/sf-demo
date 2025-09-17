@@ -59,7 +59,8 @@ final class DefaultControllerTest extends WebTestCase
 
         // the service container is always available via the test client
         /** @var Registry $registry */
-        $registry = $client->getContainer()->get('doctrine');
+        $registry = $client->getContainer()
+->get('doctrine');
 
         /** @var Post $blogPost */
         $blogPost = $registry->getRepository(Post::class)->find(1);

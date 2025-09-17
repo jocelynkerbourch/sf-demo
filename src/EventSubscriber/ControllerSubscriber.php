@@ -20,8 +20,6 @@ use Symfony\Component\HttpKernel\KernelEvents;
  * Defines the method that 'listens' to the 'kernel.controller' event, which is
  * triggered whenever a controller is executed in the application.
  *
- * @author Ryan Weaver <weaverryan@gmail.com>
- * @author Javier Eguiluz <javier.eguiluz@gmail.com>
  */
 final readonly class ControllerSubscriber implements EventSubscriberInterface
 {

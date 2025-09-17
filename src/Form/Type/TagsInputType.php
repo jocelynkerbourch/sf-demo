@@ -26,7 +26,6 @@ use Symfony\Component\Form\FormView;
  *
  * See https://symfony.com/doc/current/form/create_custom_field_type.html
  *
- * @author Yonel Ceruto <yonelceruto@gmail.com>
  */
 final class TagsInputType extends AbstractType
 {

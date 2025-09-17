@@ -18,9 +18,6 @@ use Twig\TwigFunction;
 /**
  * See https://symfony.com/doc/current/templating/twig_extension.html.
  *
- * @author Ryan Weaver <weaverryan@gmail.com>
- * @author Javier Eguiluz <javier.eguiluz@gmail.com>
- * @author Julien ITARD <julienitard@gmail.com>
  */
 final class AppExtension extends AbstractExtension
 {
@@ -40,10 +37,7 @@ final class AppExtension extends AbstractExtension
 
     public function getFunctions(): array
     {
-        return [
-            new TwigFunction('locales', [$this, 'getLocales']),
-            new TwigFunction('is_rtl', [$this, 'isRtl']),
-        ];
+        return [new TwigFunction('locales', [$this, 'getLocales']), new TwigFunction('is_rtl', [$this, 'isRtl']), ];
     }
 
     /**
@@ -62,7 +56,10 @@ final class AppExtension extends AbstractExtension
         $this->locales = [];
 
         foreach ($this->enabledLocales as $localeCode) {
-            $this->locales[] = ['code' => $localeCode, 'name' => Locales::getName($localeCode, $localeCode)];
+            $this->locales[] = [
+'code' => $localeCode,
+'name' => Locales::getName($localeCode, $localeCode)
+];
         }
 
         return $this->locales;

@@ -22,8 +22,6 @@ use function Symfony\Component\String\u;
  *
  * See https://symfony.com/doc/current/form/data_transformers.html
  *
- * @author Yonel Ceruto <yonelceruto@gmail.com>
- * @author Jonathan Boyer <contact@grafikart.fr>
  *
  * @template-implements DataTransformerInterface<Tag[], string>
  */

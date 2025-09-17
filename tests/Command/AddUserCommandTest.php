@@ -62,7 +62,9 @@ final class AddUserCommandTest extends AbstractCommandTestCase
     {
         $this->executeCommand(
             // these are the arguments (only 1 is passed, the rest are missing)
-            $isAdmin ? ['--admin' => 1] : [],
+            $isAdmin ? [
+'--admin' => 1
+] : [],
             // these are the responses given to the questions asked by the command
             // to get the value of the missing required arguments
             array_values($this->userData)
@@ -88,10 +90,12 @@ final class AddUserCommandTest extends AbstractCommandTestCase
     private function assertUserCreated(bool $isAdmin): void
     {
         /** @var UserRepository $repository */
-        $repository = $this->getContainer()->get(UserRepository::class);
+        $repository = $this->getContainer()
+->get(UserRepository::class);
 
         /** @var UserPasswordHasherInterface $passwordHasher */
-        $passwordHasher = $this->getContainer()->get(UserPasswordHasherInterface::class);
+        $passwordHasher = $this->getContainer()
+->get(UserPasswordHasherInterface::class);
 
         $user = $repository->findOneByEmail($this->userData['email']);
 

@@ -58,7 +58,8 @@ final class UserControllerTest extends WebTestCase
         $client = static::createClient();
 
         /** @var UserRepository $userRepository */
-        $userRepository = $client->getContainer()->get(UserRepository::class);
+        $userRepository = $client->getContainer()
+->get(UserRepository::class);
 
         /** @var User $user */
         $user = $userRepository->findOneByUsername('jane_admin');
@@ -85,7 +86,8 @@ final class UserControllerTest extends WebTestCase
         $client = static::createClient();
 
         /** @var UserRepository $userRepository */
-        $userRepository = $client->getContainer()->get(UserRepository::class);
+        $userRepository = $client->getContainer()
+->get(UserRepository::class);
 
         /** @var User $user */
         $user = $userRepository->findOneByUsername('jane_admin');
@@ -101,10 +103,6 @@ final class UserControllerTest extends WebTestCase
         ]);
 
         $this->assertResponseRedirects();
-        $this->assertResponseRedirects(
-            '/',
-            Response::HTTP_FOUND,
-            'Changing password logout the user.'
-        );
+        $this->assertResponseRedirects('/', Response::HTTP_FOUND, 'Changing password logout the user.');
     }
 }
