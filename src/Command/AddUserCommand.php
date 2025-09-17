@@ -183,14 +183,24 @@ final class AddUserCommand extends Command
         $this->entityManager->flush();
 
         $this->io->success(
-            \sprintf('%s was successfully created: %s (%s)', $isAdmin ? 'Administrator user' : 'User', $user->getUsername(), $user->getEmail())
+            \sprintf(
+                '%s was successfully created: %s (%s)',
+                $isAdmin ? 'Administrator user' : 'User',
+                $user->getUsername(),
+                $user->getEmail()
+            )
         );
 
         $event = $stopwatch->stop('add-user-command');
 
         if ($this->io->isVerbose()) {
             $this->io->comment(
-                \sprintf('New user database id: %d / Elapsed time: %.2f ms / Consumed memory: %.2f MB', $user->getId(), $event->getDuration(), $event->getMemory() / (1024 ** 2))
+                \sprintf(
+                    'New user database id: %d / Elapsed time: %.2f ms / Consumed memory: %.2f MB',
+                    $user->getId(),
+                    $event->getDuration(),
+                    $event->getMemory() / (1024 ** 2)
+                )
             );
         }
 
