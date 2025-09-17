@@ -53,7 +53,7 @@ final class BlogController extends AbstractController
      */
     #[Route('/', name: 'admin_index', methods: ['GET'])]
     #[Route('/', name: 'admin_post_index', methods: ['GET'])]
-    public function index(#[CurrentUser] User $user, PostRepository $posts,): Response
+    public function index(#[CurrentUser] User $user, PostRepository $posts): Response
     {
         $authorPosts = $posts->findBy([
 'author' => $user

@@ -101,6 +101,9 @@ class PostRepository extends ServiceEntityRepository
         });
     }
 
+    /**
+     * @return Post[]
+     */
     public function findTop(int $limit = 10): array
     {
         return $this->createQueryBuilder('p')

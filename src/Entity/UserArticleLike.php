@@ -19,38 +19,38 @@ class UserArticleLike
     private ?Post $post = null;
 
     #[ORM\Column]
-    private \DateTimeInterface $createdAt;
+    private ?\DateTimeImmutable $createdAt = null;
 
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
     }
  
-    public function getPost()
+    public function getPost(): ?Post
     {
         return $this->post;
     }
- 
-    public function setPost(?Post $post)
+
+    public function setPost(?Post $post): self
     {
         $this->post = $post;
 
         return $this;
     }
 
-    public function getUser()
+    public function getUser(): ?User
     {
         return $this->user;
     }
 
-    public function setUser(?User $user)
+    public function setUser(?User $user): self
     {
         $this->user = $user;
 
         return $this;
     }
 
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -58,12 +58,12 @@ class UserArticleLike
     /**
      * Get the value of createdAt
      */
-    public function getCreatedAt()
+    public function getCreatedAt(): ?\DateTimeImmutable
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt($createdAt)
+    public function setCreatedAt(\DateTimeImmutable $createdAt): self
     {
         $this->createdAt = $createdAt;
 

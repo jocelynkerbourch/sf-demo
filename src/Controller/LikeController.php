@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Post;
+use App\Entity\User;
 use App\Entity\UserArticleLike;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -21,7 +22,9 @@ class LikeController extends AbstractController
     {
         $post->setLikesCount($post->getLikesCount() + 1);
         $like = new UserArticleLike();
-        $like->setUser($this->getUser());
+        /** @var User $user */
+        $user = $this->getUser();
+        $like->setUser($user);
         $like->setPost($post);
         $this->em->persist($like);
         $this->em->flush();
